@@ -9,6 +9,11 @@ class CPU:
         """Construct a new CPU."""
         self.ram = [0] * 256
         self.reg = [0] * 8
+        self.flags = {
+            "E": 0,
+            "L": 0,
+            "G": 0
+        }
         self.pc = 0b000000000
         self.sp = 244
         self.LDI = 130
@@ -20,6 +25,10 @@ class CPU:
         self.CALL = 80
         self.ADD = 160
         self.RET = 17
+        self.CMP = 167
+        self.JMP = 84
+        self.JEQ = 85
+        self.JNE = 86
         
 
     def load(self):
@@ -33,9 +42,10 @@ class CPU:
             file1 = open(sys.argv[1], 'r')
             for text in file1:
                 x = text.split()
-                instruction = x[0]
-                if instruction != "#":
-                    program.append(int(instruction, 2))
+                if len(x) > 0:
+                    instruction = x[0]
+                    if instruction != "#":
+                        program.append(int(instruction, 2))
                     
         else:
             program = [
@@ -112,6 +122,32 @@ class CPU:
             elif IR == self.ADD:
                 self.alu('ADD', operand_a, operand_b)
                 self.pc += 3
+            elif IR == self.CMP:
+                if self.reg[operand_a] == self.reg[operand_b]:
+                    self.flags['E'] = 1
+                    self.flags['L'] = 0
+                    self.flags['G'] = 0
+                elif self.reg[operand_a] < self.reg[operand_b]:
+                    self.flags['E'] = 0
+                    self.flags['L'] = 1
+                    self.flags['G'] = 0
+                elif self.reg[operand_a] > self.reg[operand_b]:
+                    self.flags['E'] = 0
+                    self.flags['L'] = 0
+                    self.flags['G'] = 1
+                self.pc += 3
+            elif IR == self.JMP:
+                self.pc = self.reg[operand_a]
+            elif IR == self.JEQ:
+                if self.flags["E"] == 1:
+                    self.pc = self.reg[operand_a]
+                else:
+                    self.pc += 2
+            elif IR == self.JNE:
+                if self.flags["E"] == 0:
+                    self.pc = self.reg[operand_a]
+                else:
+                    self.pc += 2
             elif IR == self.CALL:
                 self.sp -= 1
                 self.ram[self.sp] = self.pc + 2
