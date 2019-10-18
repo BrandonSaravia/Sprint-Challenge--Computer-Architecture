@@ -81,84 +81,84 @@ print:
 # 5
 
 10000010 # LDI R0,10
-00000000
-00001010
+00000000        to register 0
+00001010        add 10
 10000010 # LDI R1,20
-00000001
-00010100
+00000001        to register 1
+00010100        add 20
 10000010 # LDI R2,TEST1
-00000010
-00010011
+00000010        to register 2
+00010011        add 19
 10100111 # CMP R0,R1
-00000000
-00000001
+00000000        compare register 0
+00000001        with register 1   //  flag L = 1
 01010101 # JEQ R2
-00000010
+00000010        if flag E is true jump to index 2  // false
 10000010 # LDI R3,1
-00000011
-00000001
+00000011        to register 3
+00000001        add 1
 01000111 # PRN R3
-00000011
+00000011        print register 3  // 1
 # TEST1 (address 19):
 10000010 # LDI R2,TEST2
-00000010
-00100000
+00000010        to register 2  
+00100000        add 32
 10100111 # CMP R0,R1
-00000000
-00000001
+00000000        compare register 0
+00000001        with register 1   //  flag L = 1
 01010110 # JNE R2
-00000010
+00000010        if flag E is 0 jump to index 32
 10000010 # LDI R3,2
-00000011
+00000011        
 00000010
 01000111 # PRN R3
 00000011
 # TEST2 (address 32):
 10000010 # LDI R1,10
-00000001
-00001010
+00000001        to register 1
+00001010        add 10
 10000010 # LDI R2,TEST3
-00000010
-00110000
+00000010        to register 2
+00110000        add 48
 10100111 # CMP R0,R1
-00000000
-00000001
+00000000        compare register 0
+00000001        with register 1   //  flag E = 1
 01010101 # JEQ R2
-00000010
+00000010        jump to index 48 if flag E is true
 10000010 # LDI R3,3
-00000011
-00000011
+00000011        
+00000011        
 01000111 # PRN R3
-00000011
+00000011        
 # TEST3 (address 48):
 10000010 # LDI R2,TEST4
-00000010
-00111101
+00000010        to register 3
+00111101        add 61
 10100111 # CMP R0,R1
-00000000
-00000001
+00000000        compare register 0
+00000001        with register 1   //  flag E = 1
 01010110 # JNE R2
-00000010
+00000010        flag E is 0   // false
 10000010 # LDI R3,4
-00000011
-00000100
+00000011        to register 3
+00000100        add 4
 01000111 # PRN R3
-00000011
+00000011        print register 3  // 4
 # TEST4 (address 61):
 10000010 # LDI R3,5
-00000011
-00000101
+00000011        to register 3
+00000101        add 5
 01000111 # PRN R3
-00000011
+00000011        print register 3  // 5
 10000010 # LDI R2,TEST5
-00000010
-01001001
+00000010        to register 2
+01001001        add 73
 01010100 # JMP R2
-00000010
+00000010        jump to index 73
 01000111 # PRN R3
 00000011
 # TEST5 (address 73):
-00000001 # HLT
+00000001 # HLT      stop emulator
 ```
 
 ## Stretch Problems
