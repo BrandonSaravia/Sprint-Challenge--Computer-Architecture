@@ -64,6 +64,7 @@ class CPU:
             self.ram[address] = instruction
             address += 1
 
+
     def ram_read(self, MAR):
         return self.ram[MAR]
 
@@ -78,6 +79,19 @@ class CPU:
             self.reg[reg_a] += self.reg[reg_b]
         elif op == "MUL":
             self.reg[reg_a] *= self.reg[reg_b]
+        elif op == "CMP":
+            if self.reg[reg_a] == self.reg[reg_b]:
+                self.flags['E'] = 1
+                self.flags['L'] = 0
+                self.flags['G'] = 0
+            elif self.reg[reg_a] < self.reg[reg_b]:
+                self.flags['E'] = 0
+                self.flags['L'] = 1
+                self.flags['G'] = 0
+            elif self.reg[reg_a] > self.reg[reg_b]:
+                self.flags['E'] = 0
+                self.flags['L'] = 0
+                self.flags['G'] = 1
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -123,18 +137,7 @@ class CPU:
                 self.alu('ADD', operand_a, operand_b)
                 self.pc += 3
             elif IR == self.CMP:
-                if self.reg[operand_a] == self.reg[operand_b]:
-                    self.flags['E'] = 1
-                    self.flags['L'] = 0
-                    self.flags['G'] = 0
-                elif self.reg[operand_a] < self.reg[operand_b]:
-                    self.flags['E'] = 0
-                    self.flags['L'] = 1
-                    self.flags['G'] = 0
-                elif self.reg[operand_a] > self.reg[operand_b]:
-                    self.flags['E'] = 0
-                    self.flags['L'] = 0
-                    self.flags['G'] = 1
+                self.alu("CMP", operand_a, operand_b)
                 self.pc += 3
             elif IR == self.JMP:
                 self.pc = self.reg[operand_a]
@@ -175,3 +178,4 @@ class CPU:
             else:
                 self.trace()
                 sys.exit(1)
+
